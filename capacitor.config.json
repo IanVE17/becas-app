@@ -1,0 +1,6 @@
+{
+	"appId": "io.ionic.starter",
+	"appName": "becas-app",
+	"webDir": "build",
+	"bundledWebRuntime": false
+}

@@ -1,0 +1,8 @@
+{
+  "name": "becas-app",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react",
+  "id": "5154894b"
+}
