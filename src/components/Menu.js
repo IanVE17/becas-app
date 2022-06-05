@@ -25,7 +25,6 @@ import {
   warningOutline,
   warningSharp,
 } from "ionicons/icons";
-import "../assets/styles/app.css";
 
 const appPages = [
   {
