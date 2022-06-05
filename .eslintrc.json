@@ -12,7 +12,11 @@
       ]
     }
   },
-  "env": {"es6":true},
+  "env": {
+    "es6":true, 
+    "browser": true,
+    "node": true
+  },
   "root": true,
   "plugins": [
     "prettier",
@@ -129,15 +133,6 @@
     "object-curly-spacing": [
       "error",
       "always"
-    ],
-    "capitalized-comments": [
-      "error",
-      "always",
-      {
-        "ignorePattern": "pragma|ignored",
-        "ignoreInlineComments": true,
-        "ignoreConsecutiveComments": true
-      }
     ],
     "multiline-comment-style": 0,
     "class-methods-use-this": [

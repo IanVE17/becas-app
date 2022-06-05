@@ -21,6 +21,7 @@
     "@types/react-router-dom": "^5.1.7",
     "firebase": "^9.8.2",
     "ionicons": "^5.4.0",
+    "prop-types": "^15.8.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "react-router": "^5.2.0",
@@ -53,6 +54,7 @@
       "react-app/jest"
     ]
   },
+  "eslintIgnore": ["serviceWorkerRegistration.ts", "reportWebVitals.ts"],
   "browserslist": {
     "production": [
       ">0.2%",
