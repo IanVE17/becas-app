@@ -5,7 +5,7 @@ import {
   setupIonicReact,
 } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
-import { Route } from "react-router-dom";
+import { Redirect, Route } from "react-router-dom";
 import { AdminScreen } from "./pages/index";
 import Menu from "./components/Menu";
 import Page from "./pages/Page";
@@ -38,10 +38,16 @@ export const App = () => {
         <IonSplitPane contentId="main">
           <Menu />
           <IonRouterOutlet id="main">
-            <Route path="/page/admin" exact={true}>
+            {/* TODO:
+              Redirection based on user type
+            */}
+            <Route path="/" exact={true}>
+              <Redirect to="/page/admin" />
+            </Route>
+            <Route path="/page/Admin" exact={true}>
               <AdminScreen />
             </Route>
-            <Route path="/page/becas" exact={true}>
+            <Route path="/page/Becas" exact={true}>
               <Page />
             </Route>
             {/* <Route path="/page/:name" exact={true}>
