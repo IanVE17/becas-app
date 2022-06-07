@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import {
   IonContent,
   IonIcon,
@@ -9,7 +10,6 @@ import {
   IonMenuToggle,
   IonNote,
 } from "@ionic/react";
-
 import { useLocation } from "react-router-dom";
 import {
   archiveOutline,
@@ -24,7 +24,12 @@ import {
   trashSharp,
   warningOutline,
   warningSharp,
+  logOutOutline,
+  logOutSharp,
 } from "ionicons/icons";
+import { useAuthState } from "react-firebase-hooks/auth";
+import { oAuth, logout } from "../environments/api";
+import { useHistory } from "react-router-dom";
 
 const appPages = [
   {
@@ -69,10 +74,25 @@ const appPages = [
     iosIcon: warningOutline,
     mdIcon: warningSharp,
   },
+  {
+    title: "Cerrar Sesión",
+    url: "",
+    iosIcon: logOutOutline,
+    mdIcon: logOutSharp,
+  },
 ];
 
 const Menu = () => {
+  const [user] = useAuthState(oAuth);
+  const history = useHistory();
+
   const location = useLocation();
+
+  useEffect(() => {
+    if (!user) {
+      history.push("/login");
+    }
+  }, [user]);
 
   return (
     <IonMenu contentId="main" type="overlay">
@@ -82,7 +102,11 @@ const Menu = () => {
           <IonNote>hi@ionicframework.com</IonNote>
           {appPages.map((appPage, index) => {
             return (
-              <IonMenuToggle key={index} autoHide={false}>
+              <IonMenuToggle
+                key={index}
+                autoHide={false}
+                onClick={appPage.title === "Cerrar Sesión" ? logout : null}
+              >
                 <IonItem
                   className={
                     location.pathname === appPage.url ? "selected" : ""

@@ -31,7 +31,9 @@ export const BecasAdminList = ({ data = [], loading = Boolean }) => {
           </IonItem>
         ))
       ) : (
-        <h1>No hay contactos aun</h1>
+        <div className="container">
+          <p>No hay becas aun</p>
+        </div>
       )}
     </IonList>
   );

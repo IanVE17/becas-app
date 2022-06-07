@@ -1,4 +1,6 @@
-import { initializeApp } from 'firebase/app';
+import { initializeApp } from "firebase/app";
+import { getAuth } from "firebase/auth";
+import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCGMzkc8kyDaUW6_uG99nRKsPAplrS1Huk",
@@ -7,8 +9,10 @@ const firebaseConfig = {
   storageBucket: "becas-app.appspot.com",
   messagingSenderId: "439159812338",
   appId: "1:439159812338:web:9439b05c389f8e8c54a06b",
-  measurementId: "G-B7YLKFE6XB"
+  measurementId: "G-B7YLKFE6XB",
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
+export const auth = getAuth(app);
+export const db = getFirestore(app);

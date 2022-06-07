@@ -6,7 +6,7 @@ import {
 } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
 import { Redirect, Route } from "react-router-dom";
-import { AdminScreen } from "./pages/index";
+import { AdminScreen, LoginScreen, RegisterScreen } from "./pages/index";
 import Menu from "./components/Menu";
 import Page from "./pages/Page";
 
@@ -40,19 +40,31 @@ export const App = () => {
       <IonReactRouter>
         <IonSplitPane contentId="main">
           <Menu />
+
           <IonRouterOutlet id="main">
             {/* TODO:
               Redirection based on user type
             */}
             <Route path="/" exact={true}>
-              <Redirect to="/page/admin" />
+              <Redirect to="/Login" />
             </Route>
+
+            <Route path="/Login" exact={true}>
+              <LoginScreen />
+            </Route>
+
+            <Route path="/Register" exact={true}>
+              <RegisterScreen />
+            </Route>
+
             <Route path="/page/Admin" exact={true}>
               <AdminScreen />
             </Route>
+
             <Route path="/page/Becas" exact={true}>
               <Page />
             </Route>
+
             {/* <Route path="/page/:name" exact={true}>
               <Page />
             </Route> */}
