@@ -5,6 +5,7 @@ import {
   IonLabel,
   IonRow,
   IonSpinner,
+  IonTextarea,
 } from "@ionic/react";
 import PropTypes from "prop-types";
 import { Formik } from "formik";
@@ -54,11 +55,13 @@ export const BecaForm = ({ onSubmit, loading }) => {
             <p className="error">{touched.title && errors.title}</p>
             <IonItem>
               <IonLabel>Descripción</IonLabel>
-              <IonInput
+              <IonTextarea
+                autoGrow
                 required
                 name="description"
                 onIonChange={handleChange}
                 value={values?.description}
+                rows={5}
                 clearInput
               />
             </IonItem>

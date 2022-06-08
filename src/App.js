@@ -6,9 +6,13 @@ import {
 } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
 import { Redirect, Route } from "react-router-dom";
-import { AdminScreen, LoginScreen, RegisterScreen } from "./pages/index";
+import {
+  AdminScreen,
+  BecasScreen,
+  LoginScreen,
+  RegisterScreen,
+} from "./pages/index";
 import Menu from "./components/Menu";
-import Page from "./pages/Page";
 
 /* Core CSS required for Ionic components to work properly */
 import "@ionic/react/css/core.css";
@@ -59,12 +63,8 @@ export const App = () => {
             </Route>
 
             <Route path="/page/Becas" exact={true}>
-              <Page />
+              <BecasScreen />
             </Route>
-
-            {/* <Route path="/page/:name" exact={true}>
-              <Page />
-            </Route> */}
           </IonRouterOutlet>
         </IonSplitPane>
       </IonReactRouter>

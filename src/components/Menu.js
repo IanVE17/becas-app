@@ -14,8 +14,8 @@ import { useLocation } from "react-router-dom";
 import {
   readerOutline,
   readerSharp,
-  heartOutline,
-  heartSharp,
+  bookmarkOutline,
+  bookmarkSharp,
   desktopOutline,
   desktopSharp,
   logOutOutline,
@@ -48,9 +48,9 @@ const appPages = [
   },
   {
     title: "Favoritos",
-    url: "/page/Favorites",
-    iosIcon: heartOutline,
-    mdIcon: heartSharp,
+    url: "/page/Guardados",
+    iosIcon: bookmarkOutline,
+    mdIcon: bookmarkSharp,
   },
   {
     title: "Cerrar Sesión",
