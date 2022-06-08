@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   IonContent,
   IonIcon,
@@ -12,67 +12,45 @@ import {
 } from "@ionic/react";
 import { useLocation } from "react-router-dom";
 import {
-  archiveOutline,
-  archiveSharp,
+  readerOutline,
+  readerSharp,
   heartOutline,
   heartSharp,
-  mailOutline,
-  mailSharp,
-  paperPlaneOutline,
-  paperPlaneSharp,
-  trashOutline,
-  trashSharp,
-  warningOutline,
-  warningSharp,
+  desktopOutline,
+  desktopSharp,
   logOutOutline,
   logOutSharp,
+  personCircleOutline,
+  personCircleSharp,
 } from "ionicons/icons";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { oAuth, logout } from "../environments/api";
+import { oAuth, logout, getUser } from "../environments/api";
 import { useHistory } from "react-router-dom";
 
 const appPages = [
   {
     title: "Admin",
     url: "/page/Admin",
-    iosIcon: mailOutline,
-    mdIcon: mailSharp,
+    iosIcon: desktopOutline,
+    mdIcon: desktopSharp,
+  },
+  {
+    title: "Perfil",
+    url: "/page/Profile",
+    iosIcon: personCircleOutline,
+    mdIcon: personCircleSharp,
   },
   {
     title: "Becas",
     url: "/page/Becas",
-    iosIcon: mailOutline,
-    mdIcon: mailSharp,
+    iosIcon: readerOutline,
+    mdIcon: readerSharp,
   },
   {
-    title: "Outbox",
-    url: "/page/Outbox",
-    iosIcon: paperPlaneOutline,
-    mdIcon: paperPlaneSharp,
-  },
-  {
-    title: "Favorites",
+    title: "Favoritos",
     url: "/page/Favorites",
     iosIcon: heartOutline,
     mdIcon: heartSharp,
-  },
-  {
-    title: "Archived",
-    url: "/page/Archived",
-    iosIcon: archiveOutline,
-    mdIcon: archiveSharp,
-  },
-  {
-    title: "Trash",
-    url: "/page/Trash",
-    iosIcon: trashOutline,
-    mdIcon: trashSharp,
-  },
-  {
-    title: "Spam",
-    url: "/page/Spam",
-    iosIcon: warningOutline,
-    mdIcon: warningSharp,
   },
   {
     title: "Cerrar Sesión",
@@ -84,13 +62,27 @@ const appPages = [
 
 const Menu = () => {
   const [user] = useAuthState(oAuth);
+  const [oUser, setUser] = useState({});
   const history = useHistory();
 
   const location = useLocation();
 
+  const fetchUser = async (id) => {
+    let docs = [];
+    const aData = await getUser(id);
+    aData.forEach((doc) => {
+      docs.push({ ...doc.data(), id: doc.id });
+    });
+    setUser(docs[0]);
+  };
+
   useEffect(() => {
     if (!user) {
       history.push("/login");
+    } else {
+      if (user?.uid) {
+        fetchUser(user.uid);
+      }
     }
   }, [user]);
 
@@ -98,34 +90,39 @@ const Menu = () => {
     <IonMenu contentId="main" type="overlay">
       <IonContent>
         <IonList id="inbox-list">
-          <IonListHeader>Inbox</IonListHeader>
-          <IonNote>hi@ionicframework.com</IonNote>
-          {appPages.map((appPage, index) => {
-            return (
-              <IonMenuToggle
-                key={index}
-                autoHide={false}
-                onClick={appPage.title === "Cerrar Sesión" ? logout : null}
-              >
-                <IonItem
-                  className={
-                    location.pathname === appPage.url ? "selected" : ""
-                  }
-                  routerLink={appPage.url}
-                  routerDirection="none"
-                  lines="none"
-                  detail={false}
+          <IonListHeader>Becas App</IonListHeader>
+          <IonNote>
+            Hola
+            {Object.keys(oUser).length ? ` ${oUser.names}` : ""}
+          </IonNote>
+          {(oUser?.type === "admin" ? appPages : appPages.slice(1)).map(
+            (appPage, index) => {
+              return (
+                <IonMenuToggle
+                  key={index}
+                  autoHide={false}
+                  onClick={appPage.title === "Cerrar Sesión" ? logout : null}
                 >
-                  <IonIcon
-                    slot="start"
-                    ios={appPage.iosIcon}
-                    md={appPage.mdIcon}
-                  />
-                  <IonLabel>{appPage.title}</IonLabel>
-                </IonItem>
-              </IonMenuToggle>
-            );
-          })}
+                  <IonItem
+                    className={
+                      location.pathname === appPage.url ? "selected" : ""
+                    }
+                    routerLink={appPage.url}
+                    routerDirection="none"
+                    lines="none"
+                    detail={false}
+                  >
+                    <IonIcon
+                      slot="start"
+                      ios={appPage.iosIcon}
+                      md={appPage.mdIcon}
+                    />
+                    <IonLabel>{appPage.title}</IonLabel>
+                  </IonItem>
+                </IonMenuToggle>
+              );
+            }
+          )}
         </IonList>
       </IonContent>
     </IonMenu>

@@ -42,9 +42,6 @@ export const App = () => {
           <Menu />
 
           <IonRouterOutlet id="main">
-            {/* TODO:
-              Redirection based on user type
-            */}
             <Route path="/" exact={true}>
               <Redirect to="/Login" />
             </Route>

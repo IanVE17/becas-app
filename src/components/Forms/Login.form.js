@@ -23,7 +23,10 @@ export const LoginForm = ({ onSubmit, loading }) => {
       <Formik
         initialValues={initialState}
         validationSchema={validationSchema}
-        onSubmit={onSubmit}
+        onSubmit={(values, { resetForm }) => {
+          onSubmit(values);
+          resetForm();
+        }}
       >
         {({ handleChange, handleSubmit, values, errors, touched }) => (
           <>

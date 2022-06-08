@@ -10,6 +10,8 @@ import {
   deleteDoc,
   getDocs,
   updateDoc,
+  query,
+  where,
 } from "firebase/firestore";
 import { db, auth } from "./firebaseConfig";
 
@@ -62,6 +64,9 @@ export const register = async ({
 export const logout = () => {
   signOut(auth);
 };
+
+export const getUser = (uid) =>
+  getDocs(query(collection(db, "users"), where("uid", "==", uid)));
 
 // * Calls for becas
 
