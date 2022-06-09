@@ -10,6 +10,8 @@ import {
   IonMenuButton,
   IonModal,
   IonPage,
+  IonRefresher,
+  IonRefresherContent,
   IonTitle,
   IonToolbar,
   IonToast,
@@ -64,6 +66,13 @@ export const AdminScreen = () => {
     setIsDeleting(false);
   };
 
+  const onRefresh = ({ detail: { complete } }) => {
+    updater();
+    setTimeout(() => {
+      complete();
+    }, 500);
+  };
+
   return (
     <IonPage>
       <IonHeader>
@@ -76,6 +85,10 @@ export const AdminScreen = () => {
       </IonHeader>
 
       <IonContent fullscreen>
+        <IonRefresher slot="fixed" onIonRefresh={onRefresh}>
+          <IonRefresherContent />
+        </IonRefresher>
+
         <IonFab vertical="bottom" horizontal="end" slot="fixed">
           <IonFabButton onClick={() => setIsVisible(!isVisible)}>
             <IonIcon icon={add} />

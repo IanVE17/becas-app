@@ -10,17 +10,38 @@ import {
   IonMenuButton,
   IonModal,
   IonPage,
+  IonRefresher,
+  IonRefresherContent,
   IonTitle,
   IonToolbar,
+  IonToast,
 } from "@ionic/react";
 import { add, closeCircle } from "ionicons/icons";
 import { BecasList, BecaForm } from "../../components";
+import { saveBeca } from "../../environments/api";
 import { useFetchBecas } from "../../hooks";
 
 export const BecasScreen = () => {
   const [isVisible, setIsVisible] = useState(false);
-  const [isEditing] = useState(false);
-  const [becas, loading] = useFetchBecas();
+  const [_loading, setFormLoading] = useState(false);
+  const [showToast, setShowToast] = useState(false);
+  const [becas, loading, updater] = useFetchBecas();
+
+  const onRefresh = ({ detail: { complete } }) => {
+    updater();
+    setTimeout(() => {
+      complete();
+    }, 500);
+  };
+
+  const _handleSubmit = async (values) => {
+    setFormLoading(true);
+    await saveBeca(values);
+    setIsVisible(false);
+    setShowToast(true);
+    setFormLoading(false);
+    updater();
+  };
 
   return (
     <IonPage>
@@ -34,6 +55,10 @@ export const BecasScreen = () => {
       </IonHeader>
 
       <IonContent fullscreen>
+        <IonRefresher slot="fixed" onIonRefresh={onRefresh}>
+          <IonRefresherContent />
+        </IonRefresher>
+
         <IonFab vertical="bottom" horizontal="end" slot="fixed">
           <IonFabButton onClick={() => setIsVisible(!isVisible)}>
             <IonIcon icon={add} />
@@ -44,7 +69,7 @@ export const BecasScreen = () => {
           <IonContent>
             <IonHeader>
               <IonToolbar>
-                <IonTitle>{isEditing ? "Editar" : "Añadir"} Beca</IonTitle>
+                <IonTitle>Añadir Beca</IonTitle>
                 <IonButton
                   color="danger"
                   onClick={() => {
@@ -57,11 +82,19 @@ export const BecasScreen = () => {
                 </IonButton>
               </IonToolbar>
             </IonHeader>
-            <BecaForm loading={loading} />
+            <BecaForm loading={loading} onSubmit={_handleSubmit} />
           </IonContent>
         </IonModal>
 
-        <BecasList data={becas?.data} loading={loading} />
+        <BecasList data={becas?.data} loading={_loading} />
+
+        <IonToast
+          color="success"
+          isOpen={showToast}
+          onDidDismiss={() => setShowToast(!showToast)}
+          message="La beca se añadió correctamente. Espera por su confirmación para que se muestre en la lista de becas actuales"
+          duration={4000}
+        />
       </IonContent>
     </IonPage>
   );
