@@ -4,6 +4,8 @@ import {
   IonItem,
   IonLabel,
   IonRow,
+  IonSelect,
+  IonSelectOption,
   IonSpinner,
   IonTextarea,
 } from "@ionic/react";
@@ -15,28 +17,43 @@ const initialState = {
   title: "",
   description: "",
   url: "",
+  likes: 0,
+  status: 0,
 };
-
-const regex =
-  "[(http(s)?)://(www.)?a-zA-Z0-9@:%._+~#=]{2,256}.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)";
 
 const validationSchema = yup.object().shape({
   title: yup
     .string()
     .required("El titulo es requerido")
-    .min(20, "El titulo debe tener al menos 20 caracteres"),
+    .min(10, "El titulo debe tener al menos 10 caracteres"),
   description: yup
     .string()
     .required("La descripcion es requerida")
-    .min(20, "La descripcion debe tener al menos 20 caracteres"),
-  url: yup.string().matches(regex, "La url no es valida"),
+    .min(10, "La descripcion debe tener al menos 10 caracteres"),
+  url: yup
+    .string()
+    .matches(
+      /((https?):\/\/)?(www.)?[a-z0-9]+(\.[a-z]{2,}){1,3}(#?\/?[a-zA-Z0-9#]+)*\/?(\?[a-zA-Z0-9-_]+=[a-zA-Z0-9-%]+&?)?$/,
+      "La url no es valida"
+    ),
+  status: yup.number(),
 });
 
-export const BecaForm = ({ onSubmit, loading }) => {
+export const BecaForm = ({
+  oBeca = {},
+  onSubmit,
+  onDelete,
+  loading,
+  isAdmin = false,
+  isEditing = false,
+  isDeleting = false,
+}) => {
   return (
     <div style={{ padding: "10%" }}>
       <Formik
-        initialValues={initialState}
+        initialValues={
+          isEditing && Object.keys(oBeca).length ? oBeca : initialState
+        }
         validationSchema={validationSchema}
         onSubmit={onSubmit}
       >
@@ -66,6 +83,7 @@ export const BecaForm = ({ onSubmit, loading }) => {
               />
             </IonItem>
             <p className="error">{touched.description && errors.description}</p>
+
             <IonItem>
               <IonLabel>Url</IonLabel>
               <IonInput
@@ -77,11 +95,42 @@ export const BecaForm = ({ onSubmit, loading }) => {
             </IonItem>
             <p className="error">{touched.url && errors.url}</p>
 
+            {isAdmin ? (
+              <IonItem>
+                <IonLabel>Estatus</IonLabel>
+                <IonSelect
+                  value={values?.status}
+                  name="status"
+                  interface="popover"
+                  placeholder="Selecciona el estatus de la beca"
+                  onIonChange={handleChange}
+                >
+                  <IonSelectOption value={1}>Activo</IonSelectOption>
+                  <IonSelectOption value={0}>Inactivo</IonSelectOption>
+                </IonSelect>
+              </IonItem>
+            ) : null}
+
             <IonRow style={{ marginTop: "5%" }}>
               <IonButton onClick={handleSubmit} style={{ width: "100%" }}>
                 {loading ? <IonSpinner name="crescent" /> : "Guardar Beca"}
               </IonButton>
             </IonRow>
+            {isEditing ? (
+              <IonRow style={{ marginTop: "5%" }}>
+                <IonButton
+                  color="danger"
+                  onClick={onDelete}
+                  style={{ width: "100%" }}
+                >
+                  {isDeleting ? (
+                    <IonSpinner name="crescent" />
+                  ) : (
+                    "Eliminar Beca"
+                  )}
+                </IonButton>
+              </IonRow>
+            ) : null}
           </>
         )}
       </Formik>
@@ -90,6 +139,11 @@ export const BecaForm = ({ onSubmit, loading }) => {
 };
 
 BecaForm.propTypes = {
+  oBeca: PropTypes.object,
   onSubmit: PropTypes.func,
+  onDelete: PropTypes.func,
   loading: PropTypes.bool,
+  isAdmin: PropTypes.bool,
+  isEditing: PropTypes.bool,
+  isDeleting: PropTypes.bool,
 };

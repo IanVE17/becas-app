@@ -19,6 +19,11 @@ const collectionName = "becas";
 
 export const oAuth = auth;
 
+const removeId = (obj) => {
+  delete obj.id;
+  return obj;
+};
+
 // * Calls for login / register
 
 export const login = async ({ email, password }) => {
@@ -70,12 +75,14 @@ export const getUser = (uid) =>
 
 // * Calls for becas
 
-export const getBecas = () => getDocs(collection(db, collectionName));
+export const getAllBecas = () => getDocs(collection(db, collectionName));
 
-export const saveContact = (beca) =>
-  addDoc(collection(db, collectionName), beca);
+export const getPublishedBecas = () =>
+  getDocs(query(collection(db, collectionName), where("status", "==", 1)));
 
-export const updateContact = (beca) =>
-  updateDoc(doc(db, collectionName, beca.id), beca);
+export const saveBeca = (beca) => addDoc(collection(db, collectionName), beca);
 
-export const deleteContact = (id) => deleteDoc(doc(db, collectionName, id));
+export const updateBeca = (beca) =>
+  updateDoc(doc(db, collectionName, beca.id), removeId(beca));
+
+export const deleteBeca = (id) => deleteDoc(doc(db, collectionName, id));

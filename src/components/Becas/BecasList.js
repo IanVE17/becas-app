@@ -23,7 +23,7 @@ export const BecasList = ({ data = [], loading = Boolean }) => {
     <div>
       {data.length ? (
         data.map((oItem) => (
-          <IonCard key={oItem.id} button={true}>
+          <IonCard key={oItem.id} button={true} style={{ marginBottom: "10%" }}>
             <img src={require("../../assets/img/sample-banner.png")} />
             <IonCardHeader>
               <IonCardSubtitle>{oItem.url}</IonCardSubtitle>
