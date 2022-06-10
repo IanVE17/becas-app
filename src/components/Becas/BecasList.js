@@ -35,7 +35,7 @@ export const BecasList = ({
   const openCapacitorSite = async (url) => {
     await Browser.open({
       url:
-        !url.includes("http") || !url.includes("https")
+        !url.includes("http") && !url.includes("https")
           ? `https://${url}`
           : url,
     });
