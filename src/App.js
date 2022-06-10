@@ -11,7 +11,7 @@ import {
   BecasScreen,
   LoginScreen,
   RegisterScreen,
-  ProfileScreen
+  ProfileScreen,
 } from "./pages/index";
 import Menu from "./components/Menu";
 
@@ -70,7 +70,6 @@ export const App = () => {
             <Route path="/page/Profile" exact={true}>
               <ProfileScreen />
             </Route>
-
           </IonRouterOutlet>
         </IonSplitPane>
       </IonReactRouter>
