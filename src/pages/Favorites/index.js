@@ -45,7 +45,7 @@ export const FavoritesScreen = () => {
 
   const [becas, loading, updater] = useFetchBecas(
     false,
-    oUser.favorites.length ? oUser.favorites : ["123"]
+    oUser.favorites?.length ? oUser.favorites : ["123"]
   );
 
   const onRefresh = ({ detail: { complete } }) => {
