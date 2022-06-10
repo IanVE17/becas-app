@@ -21,6 +21,7 @@ import {
 } from "ionicons/icons";
 import PropTypes from "prop-types";
 import { updateBeca } from "../../environments/api";
+import { Browser } from "@capacitor/browser";
 
 export const BecasList = ({
   data = [],
@@ -31,6 +32,15 @@ export const BecasList = ({
   const [disabledLike, setDisableLike] = useState(false);
   const [disabledDislike, setDisableDislike] = useState(false);
 
+  const openCapacitorSite = async (url) => {
+    await Browser.open({
+      url:
+        !url.includes("http") || !url.includes("https")
+          ? `https://${url}`
+          : url,
+    });
+  };
+
   return loading ? (
     <div className="container">
       <IonSpinner name="crescent" />
@@ -39,7 +49,15 @@ export const BecasList = ({
     <div>
       {data.length ? (
         data.map((oItem) => (
-          <IonCard key={oItem.id} button={true} style={{ marginBottom: "10%" }}>
+          <IonCard
+            key={oItem.id}
+            button={true}
+            style={{ marginBottom: "10%" }}
+            oUrl={oItem.url}
+            onClick={({ currentTarget: { oUrl } }) => {
+              openCapacitorSite(oUrl);
+            }}
+          >
             <img src={require("../../assets/img/sample-banner.png")} />
             <IonCardHeader>
               <IonCardSubtitle>{oItem.url}</IonCardSubtitle>
