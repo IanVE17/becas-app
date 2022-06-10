@@ -20,8 +20,9 @@ const collectionName = "becas";
 export const oAuth = auth;
 
 const removeId = (obj) => {
-  delete obj.id;
-  return obj;
+  const tmp = { ...obj };
+  delete tmp.id;
+  return tmp;
 };
 
 // * Calls for login / register
@@ -72,6 +73,11 @@ export const logout = () => {
 
 export const getUser = (uid) =>
   getDocs(query(collection(db, "users"), where("uid", "==", uid)));
+
+// * Calls for users
+
+export const updateUser = (user) =>
+  updateDoc(doc(db, "users", user.id), removeId(user));
 
 // * Calls for becas
 
