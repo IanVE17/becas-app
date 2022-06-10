@@ -86,7 +86,7 @@ export const BecasScreen = () => {
           </IonContent>
         </IonModal>
 
-        <BecasList data={becas?.data} loading={_loading} />
+        <BecasList data={becas?.data} loading={_loading} updater={updater} />
 
         <IonToast
           color="success"

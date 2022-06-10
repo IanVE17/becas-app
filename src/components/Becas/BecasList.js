@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
   IonCard,
   IonCardHeader,
@@ -11,10 +12,20 @@ import {
   IonRow,
   IonCol,
 } from "@ionic/react";
-import { bookmarkOutline, heartOutline } from "ionicons/icons";
+import {
+  bookmarkOutline,
+  heart,
+  heartOutline,
+  heartDislike,
+  heartDislikeOutline,
+} from "ionicons/icons";
 import PropTypes from "prop-types";
+import { updateBeca } from "../../environments/api";
 
-export const BecasList = ({ data = [], loading = Boolean }) => {
+export const BecasList = ({ data = [], loading = Boolean, updater }) => {
+  const [disabledLike, setDisableLike] = useState(false);
+  const [disabledDislike, setDisableDislike] = useState(false);
+
   return loading ? (
     <div className="container">
       <IonSpinner name="crescent" />
@@ -36,13 +47,54 @@ export const BecasList = ({ data = [], loading = Boolean }) => {
                 color="warning"
                 value={null}
               >
-                <IonSegmentButton>
+                <IonSegmentButton
+                  disabled={disabledLike}
+                  Item={{ id: oItem.id, likes: oItem.likes }}
+                  onClick={async ({ target: { Item } }) => {
+                    const { id, likes } = Item;
+                    await updateBeca({ id, likes: likes + 1 });
+                    updater();
+                    setDisableLike(true);
+                    setDisableDislike(true);
+                  }}
+                >
                   <IonRow>
                     <IonCol>
-                      <IonIcon icon={heartOutline} />
+                      <IonIcon
+                        icon={
+                          disabledLike || disabledDislike ? heart : heartOutline
+                        }
+                      />
                     </IonCol>
                     <IonCol>
                       <p>{oItem.likes}</p>
+                    </IonCol>
+                  </IonRow>
+                </IonSegmentButton>
+
+                <IonSegmentButton
+                  disabled={disabledDislike}
+                  Item={{ id: oItem.id, dislikes: oItem.likes }}
+                  onClick={async ({ target: { Item } }) => {
+                    const { id, dislikes } = Item;
+                    await updateBeca({ id, dislikes: dislikes + 1 });
+                    updater();
+                    setDisableLike(true);
+                    setDisableDislike(true);
+                  }}
+                >
+                  <IonRow>
+                    <IonCol>
+                      <IonIcon
+                        icon={
+                          disabledLike || disabledDislike
+                            ? heartDislike
+                            : heartDislikeOutline
+                        }
+                      />
+                    </IonCol>
+                    <IonCol>
+                      <p>{oItem.dislikes}</p>
                     </IonCol>
                   </IonRow>
                 </IonSegmentButton>
@@ -66,4 +118,5 @@ export const BecasList = ({ data = [], loading = Boolean }) => {
 BecasList.propTypes = {
   data: PropTypes.array,
   loading: PropTypes.bool,
+  updater: PropTypes.func,
 };

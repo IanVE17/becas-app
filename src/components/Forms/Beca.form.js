@@ -18,6 +18,7 @@ const initialState = {
   description: "",
   url: "",
   likes: 0,
+  dislikes: 0,
   status: 0,
 };
 
