@@ -22,6 +22,8 @@ export const LoginScreen = () => {
   useEffect(() => {
     if (user) {
       fetchUser(user.uid);
+    } else {
+      setUser({});
     }
   }, [user]);
 
@@ -38,17 +40,27 @@ export const LoginScreen = () => {
   return (
     <IonPage>
       <IonContent fullscreen className="container">
-        <h1>BECAS APP</h1>
-        {/* TODO: Put the logo HERE */}
-        <LoginForm onSubmit={_handleSubmit} loading={loading} />
-        <div>
-          <IonLabel>¿No tienes una cuenta?</IonLabel>
-          <br />
-          <br />
-          <br />
-          <IonButton color="warning" onClick={() => history.push("/Register")}>
-            REGISTRATE
-          </IonButton>
+        <div style={{ marginTop: "10%" }}>
+          <img
+            src={require("../../assets/img/logo.png")}
+            width="125px"
+            height="125px"
+            style={{ borderRadius: "50%" }}
+          />
+          <h1>BECAS APP</h1>
+          <LoginForm onSubmit={_handleSubmit} loading={loading} />
+          <div>
+            <IonLabel>¿No tienes una cuenta?</IonLabel>
+            <br />
+            <br />
+            <br />
+            <IonButton
+              color="warning"
+              onClick={() => history.push("/Register")}
+            >
+              REGISTRATE
+            </IonButton>
+          </div>
         </div>
       </IonContent>
     </IonPage>

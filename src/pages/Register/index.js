@@ -21,11 +21,18 @@ export const RegisterScreen = () => {
   return (
     <IonPage>
       <IonContent fullscreen className="container">
-        {/* TODO: Put the logo HERE */}
-        <RegisterForm onSubmit={_handleSubmit} loading={loading} />
-        <IonButton color="warning" onClick={() => history.push("/Login")}>
-          REGRESAR AL INICIO DE SESIÓN
-        </IonButton>
+        <div style={{ marginTop: "10%" }}>
+          <img
+            src={require("../../assets/img/logo.png")}
+            width="125px"
+            height="125px"
+            style={{ borderRadius: "50%" }}
+          />
+          <RegisterForm onSubmit={_handleSubmit} loading={loading} />
+          <IonButton color="warning" onClick={() => history.push("/Login")}>
+            REGRESAR AL INICIO DE SESIÓN
+          </IonButton>
+        </div>
       </IonContent>
     </IonPage>
   );
