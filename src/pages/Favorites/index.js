@@ -1,14 +1,9 @@
 import { useState, useEffect } from "react";
 import {
-  IonButton,
   IonButtons,
   IonContent,
-  IonFab,
-  IonFabButton,
   IonHeader,
-  IonIcon,
   IonMenuButton,
-  IonModal,
   IonPage,
   IonRefresher,
   IonRefresherContent,
@@ -16,19 +11,15 @@ import {
   IonToolbar,
   IonToast,
 } from "@ionic/react";
-import { add, closeCircle } from "ionicons/icons";
-import { BecasList, BecaForm } from "../../components";
+import { BecasList } from "../../components";
 import { useFetchBecas } from "../../hooks";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { oAuth, saveBeca, getUser, updateUser } from "../../environments/api";
+import { oAuth, getUser, updateUser } from "../../environments/api";
 
-export const BecasScreen = () => {
+export const FavoritesScreen = () => {
   // * Becas
   const [message, setMessage] = useState("");
-  const [isVisible, setIsVisible] = useState(false);
-  const [_loading, setFormLoading] = useState(false);
   const [showToast, setShowToast] = useState(false);
-  const [becas, loading, updater] = useFetchBecas();
 
   // * User info
   const [user] = useAuthState(oAuth);
@@ -52,23 +43,16 @@ export const BecasScreen = () => {
     }
   }, [user]);
 
+  const [becas, loading, updater] = useFetchBecas(
+    false,
+    oUser.favorites.length ? oUser.favorites : ["123"]
+  );
+
   const onRefresh = ({ detail: { complete } }) => {
     updater();
     setTimeout(() => {
       complete();
     }, 500);
-  };
-
-  const _handleSubmit = async (values) => {
-    setFormLoading(true);
-    await saveBeca(values);
-    setIsVisible(false);
-    setMessage(
-      "La beca se añadió correctamente. Espera por su confirmación para que se muestre en la lista de becas actuales"
-    );
-    setShowToast(true);
-    setFormLoading(false);
-    updater();
   };
 
   const _handleFavorite = async (cardId) => {
@@ -77,12 +61,13 @@ export const BecasScreen = () => {
       if (aTmp.includes(cardId)) {
         aTmp.splice(aTmp.indexOf(cardId), 1);
         setMessage("Beca removida");
-      } else {
-        aTmp.push(cardId);
-        setMessage("Beca guardada en favoritos");
       }
       await updateUser({ id: oUser.id, favorites: aTmp });
       setShowToast(true);
+      setUser({ favorites: ["123"] });
+      setTimeout(() => {
+        updater();
+      }, "1000");
     }
   };
 
@@ -93,7 +78,7 @@ export const BecasScreen = () => {
           <IonButtons slot="start">
             <IonMenuButton />
           </IonButtons>
-          <IonTitle>Becas</IonTitle>
+          <IonTitle>Favoritos</IonTitle>
         </IonToolbar>
       </IonHeader>
 
@@ -102,36 +87,9 @@ export const BecasScreen = () => {
           <IonRefresherContent />
         </IonRefresher>
 
-        <IonFab vertical="bottom" horizontal="end" slot="fixed">
-          <IonFabButton onClick={() => setIsVisible(!isVisible)}>
-            <IonIcon icon={add} />
-          </IonFabButton>
-        </IonFab>
-
-        <IonModal isOpen={isVisible}>
-          <IonContent>
-            <IonHeader>
-              <IonToolbar>
-                <IonTitle>Añadir Beca</IonTitle>
-                <IonButton
-                  color="danger"
-                  onClick={() => {
-                    setIsVisible(!isVisible);
-                  }}
-                  slot="end"
-                  style={{ marginRight: "3%" }}
-                >
-                  <IonIcon icon={closeCircle} />
-                </IonButton>
-              </IonToolbar>
-            </IonHeader>
-            <BecaForm loading={loading} onSubmit={_handleSubmit} />
-          </IonContent>
-        </IonModal>
-
         <BecasList
           data={becas?.data}
-          loading={_loading}
+          loading={loading}
           updater={updater}
           addFavorite={_handleFavorite}
         />

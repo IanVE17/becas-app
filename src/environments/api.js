@@ -6,6 +6,7 @@ import {
 import {
   collection,
   doc,
+  documentId,
   addDoc,
   deleteDoc,
   getDocs,
@@ -71,10 +72,10 @@ export const logout = () => {
   signOut(auth);
 };
 
+// * Calls for users
+
 export const getUser = (uid) =>
   getDocs(query(collection(db, "users"), where("uid", "==", uid)));
-
-// * Calls for users
 
 export const updateUser = (user) =>
   updateDoc(doc(db, "users", user.id), removeId(user));
@@ -85,6 +86,11 @@ export const getAllBecas = () => getDocs(collection(db, collectionName));
 
 export const getPublishedBecas = () =>
   getDocs(query(collection(db, collectionName), where("status", "==", 1)));
+
+export const getFavoriteBecas = (ids) =>
+  getDocs(
+    query(collection(db, collectionName), where(documentId(), "in", ids))
+  );
 
 export const saveBeca = (beca) => addDoc(collection(db, collectionName), beca);
 

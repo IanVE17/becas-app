@@ -1,8 +1,12 @@
 // eslint-disable-next-line no-unused-vars
 import { useState, useEffect } from "react";
-import { getAllBecas, getPublishedBecas } from "../environments/api";
+import {
+  getAllBecas,
+  getPublishedBecas,
+  getFavoriteBecas,
+} from "../environments/api";
 
-export const useFetchBecas = (getAll = false) => {
+export const useFetchBecas = (getAll = false, aFavs = []) => {
   const [data, setData] = useState({ data: [] });
   const [loading, setLoading] = useState(false);
 
@@ -12,7 +16,11 @@ export const useFetchBecas = (getAll = false) => {
     if (getAll) {
       aData = await getAllBecas();
     } else {
-      aData = await getPublishedBecas();
+      if (aFavs.length) {
+        aData = await getFavoriteBecas(aFavs);
+      } else {
+        aData = await getPublishedBecas();
+      }
     }
     let docs = [];
     aData.forEach((doc) => {

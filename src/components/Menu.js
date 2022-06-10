@@ -48,7 +48,7 @@ const appPages = [
   },
   {
     title: "Favoritos",
-    url: "/page/Guardados",
+    url: "/page/Favorites",
     iosIcon: bookmarkOutline,
     mdIcon: bookmarkSharp,
   },

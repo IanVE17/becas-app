@@ -1,5 +1,6 @@
 export * from "./Admin/index";
 export * from "./Becas/index";
+export * from "./Favorites/index";
 export * from "./Login/index";
 export * from "./Register/index";
 export * from "./Profile/index";

@@ -9,6 +9,7 @@ import { Redirect, Route } from "react-router-dom";
 import {
   AdminScreen,
   BecasScreen,
+  FavoritesScreen,
   LoginScreen,
   RegisterScreen,
   ProfileScreen,
@@ -69,6 +70,10 @@ export const App = () => {
 
             <Route path="/page/Profile" exact={true}>
               <ProfileScreen />
+            </Route>
+
+            <Route path="/page/Favorites" exact={true}>
+              <FavoritesScreen />
             </Route>
           </IonRouterOutlet>
         </IonSplitPane>

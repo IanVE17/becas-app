@@ -22,7 +22,12 @@ import {
 import PropTypes from "prop-types";
 import { updateBeca } from "../../environments/api";
 
-export const BecasList = ({ data = [], loading = Boolean, updater }) => {
+export const BecasList = ({
+  data = [],
+  loading = Boolean,
+  updater,
+  addFavorite,
+}) => {
   const [disabledLike, setDisableLike] = useState(false);
   const [disabledDislike, setDisableDislike] = useState(false);
 
@@ -99,7 +104,12 @@ export const BecasList = ({ data = [], loading = Boolean, updater }) => {
                   </IonRow>
                 </IonSegmentButton>
 
-                <IonSegmentButton>
+                <IonSegmentButton
+                  oItemId={oItem.id}
+                  onClick={({ target: { oItemId } }) => {
+                    addFavorite(oItemId);
+                  }}
+                >
                   <IonIcon icon={bookmarkOutline} />
                 </IonSegmentButton>
               </IonSegment>
@@ -119,4 +129,5 @@ BecasList.propTypes = {
   data: PropTypes.array,
   loading: PropTypes.bool,
   updater: PropTypes.func,
+  addFavorite: PropTypes.func,
 };
